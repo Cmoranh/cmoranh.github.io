@@ -1,0 +1,1703 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Informe Interactivo Harness | CrediBancrea</title>
+    <style>
+      :root {
+        --azul-bancrea: #004993;
+        --verde-bancrea: #aec90b;
+        --gris-bancrea: #5b5f62;
+        --blanco: #ffffff;
+        --azul-suave: #e8eff8;
+        --sombra: 0 12px 30px rgba(0, 73, 147, 0.14);
+        --radio: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: #1f252a;
+        font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+        background:
+          radial-gradient(circle at 10% 20%, rgba(174, 201, 11, 0.2), transparent 45%),
+          radial-gradient(circle at 90% 5%, rgba(0, 73, 147, 0.25), transparent 35%),
+          linear-gradient(180deg, #f5f8fc 0%, #f0f3f6 100%);
+      }
+
+      .contenedor {
+        width: min(1180px, 92vw);
+        margin: 0 auto;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 28px 0 36px;
+        border-bottom: 5px solid var(--verde-bancrea);
+        background: linear-gradient(140deg, var(--azul-bancrea) 0%, #0d5dad 58%, #3d6f9f 100%);
+        color: var(--blanco);
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto -110px -160px auto;
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        background: rgba(174, 201, 11, 0.23);
+        filter: blur(4px);
+      }
+
+      .hero-superior {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .marca {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .marca img.logo-principal {
+        width: clamp(170px, 24vw, 280px);
+        height: auto;
+      }
+
+
+      .hero h1 {
+        margin: 18px 0 10px;
+        font-size: clamp(1.5rem, 2.8vw, 2.6rem);
+        line-height: 1.1;
+        max-width: 900px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 900px;
+        color: rgba(255, 255, 255, 0.92);
+        font-size: clamp(1rem, 1.2vw, 1.14rem);
+        position: relative;
+        z-index: 2;
+      }
+
+      .metricas {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .metrica {
+        border-radius: 12px;
+        padding: 13px 14px;
+        background: rgba(255, 255, 255, 0.13);
+        backdrop-filter: blur(5px);
+      }
+
+      .metrica strong {
+        display: block;
+        font-size: 1.5rem;
+      }
+
+      .metrica span {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.86);
+      }
+
+      .menu {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        border-bottom: 1px solid rgba(91, 95, 98, 0.2);
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .menu .contenedor {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 9px 0;
+      }
+
+      .menu a {
+        display: inline-flex;
+        text-decoration: none;
+        color: var(--azul-bancrea);
+        border: 1px solid rgba(0, 73, 147, 0.14);
+        padding: 9px 13px;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        transition: 0.2s ease;
+      }
+
+      .menu a:hover {
+        color: var(--blanco);
+        background: var(--azul-bancrea);
+      }
+
+      .menu a.activo {
+        color: var(--blanco);
+        background: var(--azul-bancrea);
+      }
+
+      section {
+        padding: 34px 0;
+      }
+
+      .vista {
+        display: none;
+        animation: aparecer 0.22s ease;
+      }
+
+      .vista.activa {
+        display: block;
+      }
+
+      @keyframes aparecer {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .titulo-seccion {
+        margin: 0 0 6px;
+        color: var(--azul-bancrea);
+        font-size: clamp(1.25rem, 2vw, 1.7rem);
+      }
+
+      .intro-seccion {
+        margin: 0 0 20px;
+        max-width: 900px;
+        color: #3c4247;
+      }
+
+      .tarjetas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 14px;
+      }
+
+      .tarjeta {
+        background: var(--blanco);
+        border-radius: var(--radio);
+        padding: 18px;
+        box-shadow: var(--sombra);
+        border: 1px solid rgba(91, 95, 98, 0.12);
+      }
+
+      .tarjeta h3,
+      .tarjeta h4 {
+        margin: 0 0 10px;
+        color: var(--azul-bancrea);
+      }
+
+      .tarjeta p {
+        margin: 0 0 10px;
+      }
+
+      .tarjeta ul,
+      .tarjeta ol {
+        margin: 0;
+        padding-left: 19px;
+      }
+
+      .filtros {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .filtro {
+        border: none;
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 9px 13px;
+        color: #23313f;
+        font-weight: 700;
+        background: #ebf1f8;
+      }
+
+      .filtro.activo {
+        color: var(--blanco);
+        background: var(--azul-bancrea);
+      }
+
+      .linea-tiempo {
+        position: relative;
+        display: grid;
+        gap: 12px;
+      }
+
+      .evento {
+        position: relative;
+        border-left: 4px solid var(--verde-bancrea);
+        border-radius: 0 14px 14px 0;
+        padding: 14px 16px;
+        background: var(--blanco);
+        box-shadow: var(--sombra);
+      }
+
+      .evento .fecha {
+        display: inline-block;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border-radius: 999px;
+        color: var(--azul-bancrea);
+        background: #eaf3ff;
+        padding: 6px 10px;
+        margin-bottom: 8px;
+      }
+
+      .evento h3 {
+        margin: 0 0 7px;
+        font-size: 1.05rem;
+        color: var(--azul-bancrea);
+      }
+
+      .evento p {
+        margin: 0;
+      }
+
+      .bloque-pipeline {
+        background: var(--blanco);
+        border: 1px solid rgba(91, 95, 98, 0.14);
+        border-radius: var(--radio);
+        box-shadow: var(--sombra);
+        padding: 18px;
+      }
+
+      .bloque-pipeline .cabecera {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .chip {
+        display: inline-block;
+        font-size: 0.76rem;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 6px 10px;
+        color: var(--blanco);
+        background: var(--gris-bancrea);
+      }
+
+      .bloque-pipeline h3 {
+        margin: 0;
+        color: var(--azul-bancrea);
+      }
+
+      .pasos {
+        display: grid;
+        gap: 8px;
+      }
+
+      .paso {
+        border-radius: 12px;
+        border: 1px solid rgba(0, 73, 147, 0.12);
+        padding: 12px;
+        background: #f9fbff;
+      }
+
+      .paso strong {
+        color: var(--azul-bancrea);
+      }
+
+      .paso p {
+        margin: 6px 0 0;
+      }
+
+      .tabla-simple {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .tabla-simple th,
+      .tabla-simple td {
+        border: 1px solid rgba(91, 95, 98, 0.24);
+        padding: 9px 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .tabla-simple th {
+        color: var(--blanco);
+        background: var(--azul-bancrea);
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .tab {
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 700;
+        color: var(--gris-bancrea);
+        background: #eef2f7;
+      }
+
+      .tab.activo {
+        color: var(--blanco);
+        background: var(--azul-bancrea);
+      }
+
+      .panel-tab {
+        display: none;
+      }
+
+      .panel-tab.activo {
+        display: block;
+      }
+
+      .acordeon {
+        display: grid;
+        gap: 10px;
+      }
+
+      .acordeon-item {
+        background: var(--blanco);
+        border: 1px solid rgba(91, 95, 98, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .acordeon-btn {
+        width: 100%;
+        border: none;
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 700;
+        cursor: pointer;
+        color: #1f252a;
+        background: #eef4fb;
+      }
+
+      .acordeon-btn.activo {
+        color: var(--blanco);
+        background: var(--azul-bancrea);
+      }
+
+      .acordeon-contenido {
+        display: none;
+        padding: 14px 16px;
+        border-top: 1px solid rgba(91, 95, 98, 0.2);
+      }
+
+      .acordeon-contenido.abierto {
+        display: block;
+      }
+
+      .resaltado {
+        background: linear-gradient(120deg, rgba(174, 201, 11, 0.22), rgba(174, 201, 11, 0.05));
+        border: 1px solid rgba(174, 201, 11, 0.5);
+      }
+
+      .bloque-evidencia {
+        margin-top: 20px;
+        background: var(--blanco);
+        border: 1px solid rgba(91, 95, 98, 0.16);
+        border-radius: var(--radio);
+        padding: 16px;
+        box-shadow: var(--sombra);
+      }
+
+      .bloque-evidencia h3 {
+        margin: 0 0 12px;
+        color: var(--azul-bancrea);
+      }
+
+      .galeria-imagenes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+      }
+
+      .imagen-doc {
+        margin: 0;
+        border: 1px solid rgba(91, 95, 98, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f7f9fc;
+      }
+
+      .imagen-doc img {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: #fff;
+      }
+
+      .imagen-doc figcaption {
+        padding: 8px 10px;
+        font-size: 0.83rem;
+        color: #4a5158;
+        border-top: 1px solid rgba(91, 95, 98, 0.17);
+        background: #eef3f9;
+        display: grid;
+        gap: 4px;
+      }
+
+      .imagen-doc figcaption strong {
+        color: var(--azul-bancrea);
+        font-size: 0.86rem;
+      }
+
+      .imagen-doc figcaption span {
+        line-height: 1.35;
+      }
+
+      .imagen-clicable {
+        cursor: zoom-in;
+        transition: transform 0.2s ease;
+      }
+
+      .imagen-clicable:hover {
+        transform: scale(1.01);
+      }
+
+      .modal-imagen {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(16, 24, 32, 0.72);
+        z-index: 1200;
+      }
+
+      .modal-imagen.abierto {
+        display: flex;
+      }
+
+      .modal-contenido {
+        width: min(1100px, 94vw);
+        max-height: 92vh;
+        overflow: auto;
+        border-radius: 14px;
+        background: #ffffff;
+        border: 1px solid rgba(91, 95, 98, 0.25);
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.34);
+      }
+
+      .modal-cabecera {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(91, 95, 98, 0.2);
+        background: #eff4fb;
+      }
+
+      .modal-cabecera h3 {
+        margin: 0;
+        color: var(--azul-bancrea);
+        font-size: 1rem;
+      }
+
+      .modal-cerrar {
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        padding: 8px 12px;
+        color: #ffffff;
+        background: var(--gris-bancrea);
+        font-weight: 700;
+      }
+
+      .modal-cuerpo {
+        padding: 14px 16px 18px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .modal-herramientas {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .modal-herramientas button {
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        padding: 7px 10px;
+        font-weight: 700;
+        color: #ffffff;
+        background: var(--azul-bancrea);
+      }
+
+      .modal-herramientas .zoom-reset {
+        background: var(--gris-bancrea);
+      }
+
+      .modal-zoom-nivel {
+        min-width: 60px;
+        text-align: center;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #2a2f34;
+      }
+
+      .modal-visor {
+        overflow: auto;
+        max-height: 56vh;
+        border: 1px solid rgba(91, 95, 98, 0.18);
+        border-radius: 10px;
+        background: #fbfdff;
+        cursor: zoom-in;
+      }
+
+      .modal-cuerpo img {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        border: none;
+        display: block;
+      }
+
+      .modal-detalle {
+        border: 1px solid rgba(0, 73, 147, 0.14);
+        border-radius: 10px;
+        background: #f6f9fe;
+        padding: 12px;
+      }
+
+      .modal-detalle p {
+        margin: 0 0 8px;
+      }
+
+      .modal-detalle p:last-child {
+        margin-bottom: 0;
+      }
+
+      footer {
+        margin-top: 18px;
+        border-top: 4px solid var(--azul-bancrea);
+        background: #f6f8fb;
+      }
+
+      .pie {
+        padding: 22px 0;
+        color: #3d4348;
+        font-size: 0.9rem;
+      }
+
+      .pie strong {
+        color: var(--azul-bancrea);
+      }
+
+      @media (max-width: 760px) {
+        .hero {
+          padding-top: 20px;
+        }
+
+        .hero-superior {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .menu .contenedor {
+          overflow-x: auto;
+          flex-wrap: nowrap;
+          padding-bottom: 10px;
+        }
+
+        .menu a {
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero" id="inicio">
+      <div class="contenedor">
+        <div class="hero-superior">
+          <div class="marca">
+            <img class="logo-principal" src="assets/logo-bancrea-oficial.png" alt="Bancrea" />
+          </div>
+        </div>
+
+        <h1>Progreso Harness documentado</h1>
+        <p>
+          Pagina informativa e interactiva basada en el documento "Progreso de Harness documentado.pdf" y los
+          diagramas SDLC de estado actual y estado objetivo para CrediBancrea.
+        </p>
+
+        <div class="metricas">
+          <div class="metrica">
+            <strong>21</strong>
+            <span>Paginas revisadas del documento principal</span>
+          </div>
+          <div class="metrica">
+            <strong>2</strong>
+            <span>Pipelines CI detallados (Android e iOS)</span>
+          </div>
+          <div class="metrica">
+            <strong>11</strong>
+            <span>Secretos documentados en la organizacion</span>
+          </div>
+          <div class="metrica">
+            <strong>4</strong>
+            <span>Flujos SDLC incluidos (AS-IS y TO-BE por plataforma)</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="menu">
+      <div class="contenedor">
+        <a href="#resumen" data-vista="resumen" class="activo">Resumen</a>
+        <a href="#linea-tiempo" data-vista="linea-tiempo">Linea de tiempo</a>
+        <a href="#pipelines" data-vista="pipelines">Pipelines</a>
+        <a href="#asis-tobe" data-vista="asis-tobe">IS-IS / TO-BE</a>
+        <a href="#riesgos" data-vista="riesgos">Incidencias y riesgos</a>
+        <a href="#secretos" data-vista="secretos">Secretos y gobierno</a>
+        <a href="#notificaciones" data-vista="notificaciones">Notificaciones</a>
+      </div>
+    </nav>
+
+    <main class="contenedor">
+      <section id="resumen" class="vista activa">
+        <h2 class="titulo-seccion">Resumen Ejecutivo</h2>
+        <p class="intro-seccion">
+          El avance documenta la migracion de repositorios (API, Front y App) hacia Harness, la operacion de pipelines
+          CI/CD para Android e iOS, la gestion de secretos, incidencias resueltas y el modelo objetivo de gobernanza
+          para despliegues controlados.
+        </p>
+        <div class="tarjetas">
+          <article class="tarjeta">
+            <h3>Alcance ejecutado</h3>
+            <ul>
+              <li>Migracion de control de versiones desde GitHub hacia Harness como repositorio final.</li>
+              <li>Configuracion de seguridad por suborganizacion y permisos por equipo responsable.</li>
+              <li>Definicion de pipelines productivos para compilacion y despliegue en tiendas.</li>
+            </ul>
+          </article>
+          <article class="tarjeta">
+            <h3>Objetivo operativo</h3>
+            <ul>
+              <li>Automatizar build, firma, versionamiento y publicacion de apps moviles.</li>
+              <li>Reducir dependencia de procesos locales/manuales de cada desarrollador.</li>
+              <li>Aumentar trazabilidad, control de aprobaciones y tiempo de respuesta ante fallos.</li>
+            </ul>
+          </article>
+          <article class="tarjeta resaltado">
+            <h3>Puntos clave confirmados</h3>
+            <ul>
+              <li>Compilacion y despliegue a tiendas Android e iOS desde pipelines.</li>
+              <li>Gestion de artefactos en Harness Artifact Registry con tags por ambiente.</li>
+              <li>Modelo TO-BE con gates, escaneos de seguridad y aprobaciones manuales previas a PROD.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="bloque-evidencia">
+          <h3>Evidencia visual de seguimiento organizacion/desarrollo</h3>
+          <div class="galeria-imagenes">
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag14_img01.png"
+                alt="Evidencia visual de seguimiento organizacional del documento"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 14 (imagen 1)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag14_img02.png"
+                alt="Evidencia visual de seguimiento y control operativo del documento"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 14 (imagen 2)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag14_img03.png"
+                alt="Evidencia visual de proceso interno del documento"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 14 (imagen 3)</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="linea-tiempo" class="vista">
+        <h2 class="titulo-seccion">Linea de Tiempo del Progreso</h2>
+        <p class="intro-seccion">
+          Eventos principales capturados en el documento, incluyendo incidencias, configuraciones y decisiones de
+          operacion.
+        </p>
+
+        <div class="filtros" id="filtros-tiempo">
+          <button class="filtro activo" data-tiempo="todos">Todos</button>
+          <button class="filtro" data-tiempo="operacion">Operacion</button>
+          <button class="filtro" data-tiempo="incidencia">Incidencias</button>
+          <button class="filtro" data-tiempo="seguridad">Seguridad</button>
+          <button class="filtro" data-tiempo="gobierno">Gobierno</button>
+        </div>
+
+        <div class="linea-tiempo">
+          <article class="evento" data-tiempo="operacion">
+            <span class="fecha">Inicio de proyecto</span>
+            <h3>Migracion de repositorios a Harness</h3>
+            <p>
+              Se subieron y clonaron los repositorios API, Front y App en Harness sin incidencias, formalizando Harness
+              como gestor de versiones principal para CrediBancrea.
+            </p>
+          </article>
+
+          <article class="evento" data-tiempo="operacion">
+            <span class="fecha">Enero 2026</span>
+            <h3>Configuracion de pipelines productivos</h3>
+            <p>
+              Se habilitaron pipelines para compilacion y despliegue en tiendas Android e iOS, incluyendo publicacion
+              en Google Play y TestFlight/App Store.
+            </p>
+          </article>
+
+          <article class="evento" data-tiempo="incidencia">
+            <span class="fecha">Lunes 19 enero 2026</span>
+            <h3>Problematica #1: dependencia Incode</h3>
+            <p>
+              El build fallaba por acceso al repositorio privado del SDK `onboarding_flutter_wrapper`. Se resolvio con
+              PAT emitido por proveedor Incode (vigencia maxima documentada: 356 dias).
+            </p>
+          </article>
+
+          <article class="evento" data-tiempo="incidencia">
+            <span class="fecha">Jueves 22 enero 2026</span>
+            <h3>Problematica #2: timeouts en contenedor</h3>
+            <p>
+              Se registraron tiempos de espera excedidos en descarga de dependencias. Harness ajusto el entorno con
+              restricciones de red y la incidencia quedo solucionada.
+            </p>
+          </article>
+
+          <article class="evento" data-tiempo="operacion">
+            <span class="fecha">Martes 27 enero 2026</span>
+            <h3>Configuracion de tiendas y versionamiento cruzado</h3>
+            <p>
+              Se configuro la cuenta de servicio de Google Play y la Android Developer API para despliegue automatico.
+              Se publico un draft para emparejar versiones entre Google Play y App Store tras hotfix previo.
+            </p>
+          </article>
+
+          <article class="evento" data-tiempo="seguridad">
+            <span class="fecha">Enero - febrero 2026</span>
+            <h3>Inventario de secretos y responsabilidad compartida</h3>
+            <p>
+              Se documentaron 11 secretos y su manejo coordinado entre Desarrollo y Seguridad para renovaciones, control
+              de vigencias y mitigacion de riesgo operativo.
+            </p>
+          </article>
+
+          <article class="evento" data-tiempo="gobierno">
+            <span class="fecha">Febrero 2026</span>
+            <h3>Definicion del modelo TO-BE SDLC</h3>
+            <p>
+              Se consolido el flujo objetivo con gates de aprobacion, escaneos de seguridad (Semgrep, OWASP, Gitleaks),
+              retageo de artefactos y trazabilidad por ambiente DEV > QA > UAT > PROD.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="pipelines" class="vista">
+        <h2 class="titulo-seccion">Pipelines CI Detallados</h2>
+        <p class="intro-seccion">
+          Resumen tecnico de etapas, parametros y resultados esperados segun el documento principal.
+        </p>
+
+        <div class="filtros" id="filtros-plataforma">
+          <button class="filtro activo" data-plataforma="todos">Ver ambos</button>
+          <button class="filtro" data-plataforma="android">Solo Android</button>
+          <button class="filtro" data-plataforma="ios">Solo iOS</button>
+        </div>
+
+        <div class="tarjetas">
+          <article class="bloque-pipeline" data-plataforma="android">
+            <div class="cabecera">
+              <h3>Pipeline CI - Android Mobile</h3>
+              <span class="chip">Android</span>
+            </div>
+            <div class="pasos">
+              <div class="paso">
+                <strong>1) Initialize</strong>
+                <p>Variables de entorno (`dev/prod/qa/test/uat`), modo (`dev/prod`) y tipo de build (`APK/AAB`).</p>
+              </div>
+              <div class="paso">
+                <strong>2) Clone codebase</strong>
+                <p>Clonacion de branch/trigger desde repositorio configurado en Harness.</p>
+              </div>
+              <div class="paso">
+                <strong>3) Base renaming</strong>
+                <p>Renombrado y ajuste de archivos base para endpoints y configuraciones por ambiente.</p>
+              </div>
+              <div class="paso">
+                <strong>4) Install Dependencies</strong>
+                <p>Instalacion de dependencias Flutter y componentes nativos Android.</p>
+              </div>
+              <div class="paso">
+                <strong>5) Package Build</strong>
+                <p>Compilacion Flutter + Gradle + firma de artefacto APK/AAB.</p>
+              </div>
+              <div class="paso">
+                <strong>6) Artifact Upload</strong>
+                <p>Publicacion en `credibancrea-android-artifact-registry` con versionado por `build_tag`.</p>
+              </div>
+              <div class="paso">
+                <strong>7) Upload AAB to Google Play</strong>
+                <p>Publicacion automatica por track (`internal/production`) via Google Play Developer API.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="bloque-pipeline" data-plataforma="ios">
+            <div class="cabecera">
+              <h3>Pipeline CI - iOS Mobile</h3>
+              <span class="chip">iOS</span>
+            </div>
+            <div class="pasos">
+              <div class="paso">
+                <strong>1) Initialize</strong>
+                <p>Preparacion de entorno, validacion de prerrequisitos y agentes macOS.</p>
+              </div>
+              <div class="paso">
+                <strong>2) Clone codebase</strong>
+                <p>Obtencion de codigo por branch/commit y credenciales en conectores Harness.</p>
+              </div>
+              <div class="paso">
+                <strong>3) Flutter</strong>
+                <p>Inicializacion del SDK Flutter/Dart y parametros de canal/version.</p>
+              </div>
+              <div class="paso">
+                <strong>4) Install dependencies</strong>
+                <p>Instalacion de paquetes de `pubspec.yaml`, CocoaPods y componentes Xcode.</p>
+              </div>
+              <div class="paso">
+                <strong>5) Build iOS</strong>
+                <p>Compilacion Flutter para iOS con generacion de estructura nativa.</p>
+              </div>
+              <div class="paso">
+                <strong>6) Build archive</strong>
+                <p>Creacion de `.xcarchive` firmado con certificados y provisioning profile.</p>
+              </div>
+              <div class="paso">
+                <strong>7) Export IPA</strong>
+                <p>Exportacion IPA con metodo de distribucion y firma final.</p>
+              </div>
+              <div class="paso">
+                <strong>8) Prepare artifact</strong>
+                <p>Empaquetado en Artifact Registry con metadatos y validaciones.</p>
+              </div>
+              <div class="paso">
+                <strong>9) TestFlight Update</strong>
+                <p>Carga automatica a TestFlight por App Store Connect API.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <table class="tabla-simple">
+          <thead>
+            <tr>
+              <th>Aspecto</th>
+              <th>Android</th>
+              <th>iOS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Build final</td>
+              <td>APK / AAB</td>
+              <td>.xcarchive + .IPA</td>
+            </tr>
+            <tr>
+              <td>Firma</td>
+              <td>Keystore</td>
+              <td>Certificados + provisioning profile</td>
+            </tr>
+            <tr>
+              <td>Distribucion</td>
+              <td>Google Play Console</td>
+              <td>TestFlight / App Store</td>
+            </tr>
+            <tr>
+              <td>Dependencia critica</td>
+              <td>API Google Play y service account</td>
+              <td>Vigencia de certificados y App Store Connect</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="bloque-evidencia">
+          <h3>Evidencia visual de pipelines</h3>
+          <div class="galeria-imagenes">
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag01_img01.png"
+                alt="Pipeline en Harness documentado en la pagina 1"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 1</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag03_img01.png"
+                alt="Pipeline en Harness documentado en la pagina 3"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 3</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="asis-tobe" class="vista">
+        <h2 class="titulo-seccion">Vista IS-IS (AS-IS) y TO-BE</h2>
+        <p class="intro-seccion">
+          Comparacion del estado actual documentado contra el estado objetivo propuesto para Android e iOS.
+        </p>
+
+        <div class="tabs" id="tabs-flujo">
+          <button class="tab activo" data-tab="asis">IS-IS / AS-IS</button>
+          <button class="tab" data-tab="tobe">TO-BE</button>
+        </div>
+
+        <div class="panel-tab activo" id="tab-asis">
+          <div class="tarjetas">
+            <article class="tarjeta">
+              <h3>AS-IS Android</h3>
+              <ul>
+                <li>Dependencias, build y firma realizados localmente en laptop del equipo.</li>
+                <li>Credenciales tomadas desde repositorios/carpetas locales.</li>
+                <li>Envio de artefactos por correo para validaciones QA/UAT.</li>
+                <li>Subida a Google Play tras aprobaciones y validacion manual.</li>
+                <li>Rollbacks y trazabilidad mas dependientes de tareas manuales.</li>
+              </ul>
+            </article>
+            <article class="tarjeta">
+              <h3>AS-IS iOS</h3>
+              <ul>
+                <li>Construccion local con Flutter + Xcode y exportacion IPA manual.</li>
+                <li>Gestion local/manual de certificados y perfiles de aprovisionamiento.</li>
+                <li>Subida por TestFlight/Transporter con aprobaciones secuenciales.</li>
+                <li>Notificaciones y pruebas coordinadas por correo/equipos.</li>
+                <li>Mayor riesgo operativo por dispersion de pasos criticos.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="panel-tab" id="tab-tobe">
+          <div class="tarjetas">
+            <article class="tarjeta">
+              <h3>TO-BE Android</h3>
+              <ol>
+                <li>Ramas `feature/**` > PR a `develop` con revision tecnica.</li>
+                <li>Trigger de pipeline CI y escaneos (SAST/SCA/Gitleaks).</li>
+                <li>Build y firma automatica en Harness.</li>
+                <li>Registro de artefactos y retageo por ambiente (SN > RC > UAT > Release).</li>
+                <li>Aprobaciones de despliegue y publicacion controlada en Google Play.</li>
+              </ol>
+            </article>
+            <article class="tarjeta">
+              <h3>TO-BE iOS</h3>
+              <ol>
+                <li>Flujo equivalente al Android en repositorio y aprobaciones.</li>
+                <li>Build archive + export IPA automatizados en agents macOS.</li>
+                <li>Firma centralizada con secretos administrados en Harness.</li>
+                <li>Promocion por ambientes con notificacion y validacion minima.</li>
+                <li>Preparacion y carga a TestFlight/App Store con mayor trazabilidad.</li>
+              </ol>
+            </article>
+            <article class="tarjeta resaltado">
+              <h3>Diferencia estructural clave</h3>
+              <p>
+                El modelo TO-BE elimina gran parte de la ejecucion local/manual del AS-IS y formaliza controles de
+                seguridad, aprobacion humana y versionado progresivo de artefactos antes de produccion.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="riesgos" class="vista">
+        <h2 class="titulo-seccion">Incidencias, Fallos y Riesgos Operativos</h2>
+        <p class="intro-seccion">
+          Resumen de fallos documentados, mecanismos de diagnostico en Harness y controles recomendados.
+        </p>
+        <div class="acordeon">
+          <article class="acordeon-item">
+            <button class="acordeon-btn">Problematica #1 (19 enero 2026) - Dependencia privada Incode</button>
+            <div class="acordeon-contenido">
+              <p>
+                El pipeline no podia completar compilacion por acceso al repositorio privado del SDK Incode. Solucion:
+                PAT proporcionado por proveedor, con vigencia maxima de 356 dias y necesidad de renovacion periodica.
+              </p>
+            </div>
+          </article>
+
+          <article class="acordeon-item">
+            <button class="acordeon-btn">Problematica #2 (22 enero 2026) - Timeouts de red en contenedor</button>
+            <div class="acordeon-contenido">
+              <p>
+                Se detectaron tiempos de espera en descarga de dependencias. Harness ajusto configuracion del entorno
+                con restricciones de red y la ejecucion se normalizo.
+              </p>
+            </div>
+          </article>
+
+          <article class="acordeon-item">
+            <button class="acordeon-btn">Puntos de fallo recurrente en pipelines</button>
+            <div class="acordeon-contenido">
+              <ul>
+                <li>Errores de dependencias o versiones incompatibles.</li>
+                <li>Fallos de compilacion y firma de aplicaciones.</li>
+                <li>Autenticacion fallida con App Store Connect o Google Play.</li>
+                <li>Variables/secretos mal configurados o expirados.</li>
+                <li>Problemas de recursos en agentes de build (especialmente macOS).</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="acordeon-item">
+            <button class="acordeon-btn">Visualizacion de fallos en Harness</button>
+            <div class="acordeon-contenido">
+              <ul>
+                <li>Ruta: Continuous Integration > Pipelines.</li>
+                <li>Estado `Failed`, tiempo de ejecucion y usuario disparador.</li>
+                <li>Analisis por stage logs, variables de entrada y artefactos generados.</li>
+                <li>Reejecucion controlada mediante opcion `Re-run`.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="bloque-evidencia">
+          <h3>Evidencia visual de incidencias y fallos</h3>
+          <div class="galeria-imagenes">
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag06_img01.png"
+                alt="Vista del pipeline fallido en Harness"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 6 (imagen 1)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag06_img02.png"
+                alt="Detalle visual de seccion pipelines en Harness"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 6 (imagen 2)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag07_img01.png"
+                alt="Evidencia de logs y diagnostico de fallos"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 7</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag08_img01.png"
+                alt="Correo de confirmacion relacionado con incidencia"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 8 (imagen 1)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag08_img02.png"
+                alt="Detalle tecnico adicional de incidencia"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 8 (imagen 2)</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="secretos" class="vista">
+        <h2 class="titulo-seccion">Secretos, Seguridad y Gobierno</h2>
+        <p class="intro-seccion">
+          Inventario consolidado del documento y consideraciones de control para iOS/Android.
+        </p>
+
+        <div class="tarjetas">
+          <article class="tarjeta">
+            <h3>Resumen por categoria</h3>
+            <ul>
+              <li>iOS: 7 secretos.</li>
+              <li>Android: 2 secretos (incluyendo credenciales mixtas usadas en Android).</li>
+              <li>Seguridad y herramientas: 2 secretos.</li>
+              <li>Total documentado: 11 secretos.</li>
+            </ul>
+          </article>
+          <article class="tarjeta">
+            <h3>Secretos iOS (documentados)</h3>
+            <ul>
+              <li>`IOS_BUNDLE_ID`</li>
+              <li>`IOS_SIGNING_CERT_P12_PASSWORD`</li>
+              <li>`IOS_SIGNING_CERT_P12_BASE64`</li>
+              <li>`IOS_PROVISIONING_PROFILE_BASE64` (vigencia observada: hasta 19/febrero/2026)</li>
+              <li>`APP_STORE_CONNECT_ISSUER_ID`</li>
+              <li>`APP_STORE_CONNECT_KEY_ID_testing`</li>
+              <li>`APP_STORE_CONNECT_API_KEY_P8_B64_testing`</li>
+            </ul>
+          </article>
+          <article class="tarjeta">
+            <h3>Secretos Android y mixtos</h3>
+            <ul>
+              <li>`google_play_sa_json_base64`</li>
+              <li>`github_private_key`</li>
+              <li>`Repositorio_Privado_PAT`</li>
+              <li>`Snyk_AT` (herramienta de seguridad)</li>
+            </ul>
+          </article>
+        </div>
+
+        <table class="tabla-simple">
+          <thead>
+            <tr>
+              <th>Control de gobierno</th>
+              <th>Implementacion indicada</th>
+              <th>Riesgo mitigado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Gestor central de secretos</td>
+              <td>Harness Secrets con control por equipos y renovacion</td>
+              <td>Exposicion de credenciales en equipos locales</td>
+            </tr>
+            <tr>
+              <td>Coordinacion Desarrollo + Seguridad</td>
+              <td>Responsabilidad compartida de vigencias y rotacion</td>
+              <td>Expiracion no detectada y caidas en despliegues</td>
+            </tr>
+            <tr>
+              <td>Aprobaciones manuales a produccion</td>
+              <td>Approval gate antes de liberar version final</td>
+              <td>Promocion accidental de versiones no validadas</td>
+            </tr>
+            <tr>
+              <td>Escaneos de seguridad en CI</td>
+              <td>SAST (Semgrep), SCA (OWASP), secretos (Gitleaks)</td>
+              <td>Vulnerabilidades y filtracion de secretos en repos</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="bloque-evidencia">
+          <h3>Evidencia visual de configuracion de tiendas y permisos</h3>
+          <div class="galeria-imagenes">
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag09_img01.png"
+                alt="Configuracion de cuenta de servicio para Google Play"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 9</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag10_img01.png"
+                alt="Asignacion de permisos en Google Play Console"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 10 (imagen 1)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag10_img02.png"
+                alt="Detalle de permisos de publicacion en Google Play"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 10 (imagen 2)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag11_img01.png"
+                alt="Detalle visual complementario de configuracion de acceso"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 11 (imagen 1)</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag11_img02.png"
+                alt="Configuracion adicional de permisos en Google Play"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 11 (imagen 2)</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="notificaciones" class="vista">
+        <h2 class="titulo-seccion">Notificaciones y Trazabilidad</h2>
+        <p class="intro-seccion">
+          El documento registra notificaciones automaticas de aprobacion y fallo para reducir tiempos de reaccion y
+          reforzar auditoria del flujo.
+        </p>
+        <div class="tarjetas">
+          <article class="tarjeta">
+            <h3>Approval Required</h3>
+            <ul>
+              <li>Se activa al llegar a etapa previa a produccion.</li>
+              <li>Incluye pipeline, proyecto, usuario, etapa y tiempo limite de aprobacion.</li>
+              <li>Aporta control humano antes de liberar una version productiva.</li>
+            </ul>
+          </article>
+          <article class="tarjeta">
+            <h3>Pipeline Failed</h3>
+            <ul>
+              <li>Notifica error en ejecucion con fecha/hora de inicio y de fallo.</li>
+              <li>Incluye duracion total y URL directa al run fallido.</li>
+              <li>Reduce MTTR al permitir diagnostico inmediato por responsables.</li>
+            </ul>
+          </article>
+          <article class="tarjeta resaltado">
+            <h3>Estado del equipo y PR</h3>
+            <p>
+              Se documenta que no existe rol formal unico de responsable de desarrollo; por estructura actual, cada
+              desarrollador valida y acepta sus propios pull requests para API, Web y App.
+            </p>
+          </article>
+        </div>
+
+        <div class="bloque-evidencia">
+          <h3>Evidencia visual de notificaciones automaticas</h3>
+          <div class="galeria-imagenes">
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag16_img01.png"
+                alt="Notificacion de aprobacion requerida en pipeline"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 16</figcaption>
+            </figure>
+            <figure class="imagen-doc">
+              <img
+                src="assets/documento-imagenes/pag17_img01.png"
+                alt="Notificacion de pipeline fallido"
+                loading="lazy"
+              />
+              <figcaption>Documento - pagina 17</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="contenedor pie">
+        <p>
+          <strong>Fuente de contenido:</strong> `Progreso de Harness documentado.pdf`, `SDLC_Android_AS-IS...`,
+          `SDLC_iOS_AS-IS...`, `SDLC_Android_TO-BE...`, `SDLC_iOS_TO-BE...`.
+        </p>
+        <p>
+          <strong>Identidad visual:</strong> Paleta solicitada (`#004993`, `#AEC90B`, `#5B5F62`) y logos oficiales
+          obtenidos desde <a href="https://www.bancrea.com" target="_blank" rel="noopener">bancrea.com</a>.
+        </p>
+      </div>
+    </footer>
+
+    <div class="modal-imagen" id="modal-imagen" aria-hidden="true">
+      <div class="modal-contenido" role="dialog" aria-modal="true" aria-labelledby="modal-titulo-imagen">
+        <div class="modal-cabecera">
+          <h3 id="modal-titulo-imagen">Vista previa de evidencia</h3>
+          <button class="modal-cerrar" id="modal-cerrar-imagen" type="button">Cerrar</button>
+        </div>
+        <div class="modal-cuerpo">
+          <div class="modal-herramientas">
+            <button id="modal-zoom-out" type="button" aria-label="Alejar imagen">-</button>
+            <span class="modal-zoom-nivel" id="modal-zoom-nivel">100%</span>
+            <button id="modal-zoom-in" type="button" aria-label="Acercar imagen">+</button>
+            <button class="zoom-reset" id="modal-zoom-reset" type="button">Reset</button>
+          </div>
+          <div class="modal-visor" id="modal-visor">
+            <img id="modal-img" src="" alt="" />
+          </div>
+          <div class="modal-detalle">
+            <p><strong>Descripción:</strong> <span id="modal-descripcion"></span></p>
+            <p><strong>Explicación:</strong> <span id="modal-explicacion"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const enlacesVista = document.querySelectorAll(".menu a[data-vista]");
+      const vistas = document.querySelectorAll(".vista");
+
+      enlacesVista.forEach((enlace) => {
+        enlace.addEventListener("click", (evento) => {
+          evento.preventDefault();
+          const vistaObjetivo = enlace.dataset.vista;
+
+          enlacesVista.forEach((item) => item.classList.remove("activo"));
+          enlace.classList.add("activo");
+
+          vistas.forEach((vista) => {
+            vista.classList.toggle("activa", vista.id === vistaObjetivo);
+          });
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+
+      const activarFiltros = (selectorGrupo, atributo, selectorItems) => {
+        const botones = document.querySelectorAll(`${selectorGrupo} .filtro`);
+        const items = document.querySelectorAll(selectorItems);
+
+        botones.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            botones.forEach((b) => b.classList.remove("activo"));
+            btn.classList.add("activo");
+            const valor = btn.dataset[atributo];
+
+            items.forEach((item) => {
+              if (valor === "todos" || item.dataset[atributo] === valor) {
+                item.style.display = "";
+              } else {
+                item.style.display = "none";
+              }
+            });
+          });
+        });
+      };
+
+      activarFiltros("#filtros-tiempo", "tiempo", ".evento");
+      activarFiltros("#filtros-plataforma", "plataforma", ".bloque-pipeline[data-plataforma]");
+
+      const botonesTabs = document.querySelectorAll("#tabs-flujo .tab");
+      const panelesTabs = {
+        asis: document.getElementById("tab-asis"),
+        tobe: document.getElementById("tab-tobe"),
+      };
+
+      botonesTabs.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          botonesTabs.forEach((b) => b.classList.remove("activo"));
+          btn.classList.add("activo");
+          Object.values(panelesTabs).forEach((panel) => panel.classList.remove("activo"));
+          panelesTabs[btn.dataset.tab].classList.add("activo");
+        });
+      });
+
+      const botonesAcordeon = document.querySelectorAll(".acordeon-btn");
+      botonesAcordeon.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const contenido = btn.nextElementSibling;
+          const estaAbierto = contenido.classList.contains("abierto");
+          if (estaAbierto) {
+            contenido.classList.remove("abierto");
+            btn.classList.remove("activo");
+          } else {
+            contenido.classList.add("abierto");
+            btn.classList.add("activo");
+          }
+        });
+      });
+
+      const detallesImagenes = {
+        "assets/documento-imagenes/pag14_img01.png": {
+          titulo: "Pagina 14 - Seguimiento organizacional (imagen 1)",
+          descripcion:
+            "Se observa una evidencia visual usada en seguimiento interno para revisar el estado del proceso y su secuencia de actividades dentro del esquema de trabajo actual.",
+          explicacion:
+            "Esta captura respalda el apartado de organizacion/desarrollo al mostrar que existe monitoreo visual del flujo, lo cual ayuda a alinear responsables y detectar desviaciones tempranas.",
+        },
+        "assets/documento-imagenes/pag14_img02.png": {
+          titulo: "Pagina 14 - Seguimiento organizacional (imagen 2)",
+          descripcion:
+            "La imagen muestra un tablero o matriz de control utilizada para concentrar información operativa relacionada con la evolución del proceso.",
+          explicacion:
+            "Funciona como evidencia de trazabilidad administrativa: permite comparar avances, validar pendientes y documentar decisiones para continuidad del proyecto.",
+        },
+        "assets/documento-imagenes/pag14_img03.png": {
+          titulo: "Pagina 14 - Seguimiento organizacional (imagen 3)",
+          descripcion:
+            "Se aprecia una pantalla de configuración/registro operativo con múltiples campos, orientada al control de parámetros del flujo de trabajo.",
+          explicacion:
+            "Aporta contexto sobre cómo se formaliza la operación mediante datos estructurados, reduciendo ambigüedad y facilitando auditoría posterior.",
+        },
+        "assets/documento-imagenes/pag01_img01.png": {
+          titulo: "Pagina 1 - Pipeline documentado",
+          descripcion:
+            "Se visualiza el flujo principal del pipeline en Harness con sus etapas conectadas, mostrando el recorrido de ejecución desde inicio hasta salida de artefacto.",
+          explicacion:
+            "Esta evidencia confirma que el proceso ya está representado de forma secuencial y observable, base para estandarizar CI/CD y reducir operación manual.",
+        },
+        "assets/documento-imagenes/pag03_img01.png": {
+          titulo: "Pagina 3 - Vista complementaria de pipeline",
+          descripcion:
+            "La captura muestra otra ejecución/segmento del pipeline con detalle de etapas técnicas y transición entre componentes del flujo.",
+          explicacion:
+            "Sirve para validar que la automatización no es solo conceptual: hay implementación visible por etapas, útil para diagnóstico y mejora continua.",
+        },
+        "assets/documento-imagenes/pag06_img01.png": {
+          titulo: "Pagina 6 - Visualización de pipeline fallido",
+          descripcion:
+            "Se observa el panel de Harness en modo de ejecución con indicadores de estado, incluyendo la referencia a un flujo con resultado no exitoso.",
+          explicacion:
+            "Demuestra el punto de entrada para incident management: identificar fallos rápidamente desde la consola para iniciar análisis técnico.",
+        },
+        "assets/documento-imagenes/pag06_img02.png": {
+          titulo: "Pagina 6 - Contexto de sección de pipelines",
+          descripcion:
+            "La imagen contiene la referencia visual del módulo/panel de pipelines dentro de la plataforma, que contextualiza la navegación del usuario.",
+          explicacion:
+            "Ayuda a ubicar al equipo en el área exacta donde se revisan ejecuciones, reduciendo tiempo de localización durante una contingencia.",
+        },
+        "assets/documento-imagenes/pag07_img01.png": {
+          titulo: "Pagina 7 - Detalle técnico de ejecución y logs",
+          descripcion:
+            "La captura evidencia una vista más detallada del run, con información de etapas y fragmentos de salida técnica para depuración.",
+          explicacion:
+            "Sostiene la práctica de diagnóstico por evidencia: permite aislar la etapa fallida y validar causas antes de reintentar el pipeline.",
+        },
+        "assets/documento-imagenes/pag08_img01.png": {
+          titulo: "Pagina 8 - Correo de confirmación de proveedor",
+          descripcion:
+            "Se observa un correo relacionado con la incidencia del acceso al repositorio privado, donde se confirma el comportamiento del mecanismo de autenticación.",
+          explicacion:
+            "Esta evidencia respalda la resolución de la problemática #1 y documenta dependencias externas que deben controlarse por vigencia de credenciales.",
+        },
+        "assets/documento-imagenes/pag08_img02.png": {
+          titulo: "Pagina 8 - Evidencia de ejecución técnica",
+          descripcion:
+            "La captura muestra salida de consola/ejecución asociada al problema de dependencias, con trazas útiles para confirmar comportamiento del build.",
+          explicacion:
+            "Complementa la evidencia del correo al mostrar el impacto operativo real en la ejecución del pipeline y su posterior normalización.",
+        },
+        "assets/documento-imagenes/pag09_img01.png": {
+          titulo: "Pagina 9 - Configuración de cuenta de servicio",
+          descripcion:
+            "Se aprecia la configuración vinculada a Google Play para habilitar despliegues automatizados mediante cuenta de servicio y permisos adecuados.",
+          explicacion:
+            "Es una pieza clave de gobierno técnico: sin esta configuración no es posible mantener publicación continua y trazable desde Harness.",
+        },
+        "assets/documento-imagenes/pag10_img01.png": {
+          titulo: "Pagina 10 - Asignación de permisos en Play Console",
+          descripcion:
+            "La imagen evidencia la pantalla de permisos para la cuenta utilizada por el pipeline, incluyendo alcances de gestión de releases.",
+          explicacion:
+            "Muestra control de privilegios en la cadena de despliegue, reduciendo riesgos por permisos excesivos o insuficientes.",
+        },
+        "assets/documento-imagenes/pag10_img02.png": {
+          titulo: "Pagina 10 - Validación de acceso y publicación",
+          descripcion:
+            "Se muestra una segunda vista de la configuración en tienda con datos complementarios de acceso y publicación automatizada.",
+          explicacion:
+            "Refuerza la evidencia de que la integración no solo está declarada, sino configurada y verificable en la consola oficial.",
+        },
+        "assets/documento-imagenes/pag11_img01.png": {
+          titulo: "Pagina 11 - Evidencia complementaria de permisos (1)",
+          descripcion:
+            "Captura adicional del proceso de configuración que muestra elementos de control asociados a seguridad y operación de la app en tienda.",
+          explicacion:
+            "Aporta redundancia documental para auditoría y continuidad operativa ante rotación de personal o cambios en responsables.",
+        },
+        "assets/documento-imagenes/pag11_img02.png": {
+          titulo: "Pagina 11 - Evidencia complementaria de permisos (2)",
+          descripcion:
+            "Segunda evidencia visual de la misma sección, orientada a detallar parámetros o estados específicos del alta de permisos.",
+          explicacion:
+            "Facilita reproducibilidad del setup: el equipo puede validar configuraciones paso a paso y evitar regresiones en accesos.",
+        },
+        "assets/documento-imagenes/pag16_img01.png": {
+          titulo: "Pagina 16 - Notificación de aprobación requerida",
+          descripcion:
+            "Se observa la notificación automática emitida cuando el pipeline alcanza una compuerta manual previa a producción.",
+          explicacion:
+            "Evidencia el control de gobernanza: ninguna liberación productiva avanza sin validación humana explícita en el punto crítico.",
+        },
+        "assets/documento-imagenes/pag17_img01.png": {
+          titulo: "Pagina 17 - Notificación de fallo de pipeline",
+          descripcion:
+            "La imagen muestra el mensaje automático de fallo con datos de contexto de ejecución para atención inmediata del equipo.",
+          explicacion:
+            "Este tipo de aviso reduce MTTR al entregar visibilidad rápida del incidente y dirigir al responsable al run afectado.",
+        },
+      };
+
+      const modalImagen = document.getElementById("modal-imagen");
+      const modalVisor = document.getElementById("modal-visor");
+      const modalImagenTag = document.getElementById("modal-img");
+      const modalTitulo = document.getElementById("modal-titulo-imagen");
+      const modalDescripcion = document.getElementById("modal-descripcion");
+      const modalExplicacion = document.getElementById("modal-explicacion");
+      const modalCerrar = document.getElementById("modal-cerrar-imagen");
+      const modalZoomIn = document.getElementById("modal-zoom-in");
+      const modalZoomOut = document.getElementById("modal-zoom-out");
+      const modalZoomReset = document.getElementById("modal-zoom-reset");
+      const modalZoomNivel = document.getElementById("modal-zoom-nivel");
+      const imagenesDocumento = document.querySelectorAll(".imagen-doc img");
+      const ZOOM_MIN = 1;
+      const ZOOM_MAX = 4;
+      const ZOOM_STEP = 0.25;
+      let zoomActual = 1;
+
+      const actualizarZoom = () => {
+        modalImagenTag.style.width = `${Math.round(zoomActual * 100)}%`;
+        modalZoomNivel.textContent = `${Math.round(zoomActual * 100)}%`;
+        modalVisor.style.cursor = zoomActual > 1 ? "zoom-out" : "zoom-in";
+      };
+
+      const reiniciarZoom = () => {
+        zoomActual = 1;
+        actualizarZoom();
+        modalVisor.scrollTop = 0;
+        modalVisor.scrollLeft = 0;
+      };
+
+      const ajustarZoom = (delta) => {
+        const siguiente = Number((zoomActual + delta).toFixed(2));
+        zoomActual = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, siguiente));
+        actualizarZoom();
+      };
+
+      const abrirModalImagen = (imagen, detalle) => {
+        modalImagenTag.src = imagen.src;
+        modalImagenTag.alt = imagen.alt;
+        modalTitulo.textContent = detalle.titulo;
+        modalDescripcion.textContent = detalle.descripcion;
+        modalExplicacion.textContent = detalle.explicacion;
+        reiniciarZoom();
+        modalImagen.classList.add("abierto");
+        modalImagen.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      };
+
+      const cerrarModalImagen = () => {
+        modalImagen.classList.remove("abierto");
+        modalImagen.setAttribute("aria-hidden", "true");
+        modalImagenTag.src = "";
+        reiniciarZoom();
+        document.body.style.overflow = "";
+      };
+
+      imagenesDocumento.forEach((imagen) => {
+        const srcRelativo = imagen.getAttribute("src");
+        const detalle = detallesImagenes[srcRelativo];
+        const contenedor = imagen.closest(".imagen-doc");
+        const pie = contenedor?.querySelector("figcaption");
+
+        if (detalle && pie) {
+          pie.innerHTML = `
+            <strong>${detalle.titulo}</strong>
+            <span>${detalle.descripcion}</span>
+            <span>${detalle.explicacion}</span>
+          `;
+        }
+
+        imagen.classList.add("imagen-clicable");
+        imagen.setAttribute("tabindex", "0");
+        imagen.setAttribute("role", "button");
+        imagen.setAttribute("aria-label", "Abrir vista previa de imagen");
+
+        imagen.addEventListener("click", () => {
+          abrirModalImagen(imagen, detalle || {
+            titulo: "Vista previa de evidencia",
+            descripcion: "Captura integrada desde el documento de referencia.",
+            explicacion: "Se incluye como respaldo visual del apartado correspondiente.",
+          });
+        });
+
+        imagen.addEventListener("keydown", (evento) => {
+          if (evento.key === "Enter" || evento.key === " ") {
+            evento.preventDefault();
+            abrirModalImagen(imagen, detalle || {
+              titulo: "Vista previa de evidencia",
+              descripcion: "Captura integrada desde el documento de referencia.",
+              explicacion: "Se incluye como respaldo visual del apartado correspondiente.",
+            });
+          }
+        });
+      });
+
+      modalCerrar.addEventListener("click", cerrarModalImagen);
+      modalImagen.addEventListener("click", (evento) => {
+        if (evento.target === modalImagen) {
+          cerrarModalImagen();
+        }
+      });
+
+      modalZoomIn.addEventListener("click", () => ajustarZoom(ZOOM_STEP));
+      modalZoomOut.addEventListener("click", () => ajustarZoom(-ZOOM_STEP));
+      modalZoomReset.addEventListener("click", reiniciarZoom);
+
+      modalImagenTag.addEventListener("click", () => {
+        zoomActual = zoomActual === 1 ? 2 : 1;
+        actualizarZoom();
+      });
+
+      modalVisor.addEventListener(
+        "wheel",
+        (evento) => {
+          if (!modalImagen.classList.contains("abierto")) {
+            return;
+          }
+          evento.preventDefault();
+          ajustarZoom(evento.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP);
+        },
+        { passive: false }
+      );
+
+      document.addEventListener("keydown", (evento) => {
+        if (evento.key === "Escape" && modalImagen.classList.contains("abierto")) {
+          cerrarModalImagen();
+        }
+      });
+    </script>
+  </body>
+</html>
